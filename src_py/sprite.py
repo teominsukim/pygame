@@ -359,6 +359,7 @@ class WeakDirtySprite(WeakSprite, DirtySprite):
     of both classes.
     """
 
+T = TypeVar("T")
 
 class AbstractGroup(Generic[TypeVar("T")]):
     """base class for containers of sprites
@@ -379,7 +380,7 @@ class AbstractGroup(Generic[TypeVar("T")]):
         self.spritedict = {}
         self.lostsprites = []
 
-    def sprites(self):
+    def sprites(self) -> list[T]:
         """get a list of sprites in the group
 
         Group.sprites(): return list
@@ -639,7 +640,7 @@ class AbstractGroup(Generic[TypeVar("T")]):
         return f"<{self.__class__.__name__}({len(self)} sprites)>"
 
 
-class Group(AbstractGroup):
+class Group(AbstractGroup[T],Generic[T]):
     """container class for many Sprites
 
     pygame.sprite.Group(*sprites): return Group
@@ -659,8 +660,8 @@ class Group(AbstractGroup):
 
     """
 
-    def __init__(self, *sprites):
-        AbstractGroup.__init__(self)
+    def __init__(self, *sprites: T) -> None:
+        super().__init__()
         self.add(*sprites)
 
 
